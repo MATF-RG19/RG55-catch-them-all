@@ -2,47 +2,62 @@
 #include<GL/gl.h>
 #include<GL/glut.h>
 #include<math.h>
+#include"objekti.hpp"
+
+#define MOTION_INTERVAL 20
 
 using namespace std;
 
 // ugao kamere
 float ugao = 90;
 
+//flag za akciju
+bool flagAkcija = false;
+
+// flag za startovanje
+bool flagStart = false;
+
+// na koju poziciju pretenduje
+float gdeDolazimo;
+
 // pozicije kotlica
-float lonacX = 0;
 float lonacTekuci = 0;
 
-// funkcija timer koja osvezava prozor
-void timer(int) {
-    glutPostRedisplay();
-    glutTimerFunc(1000/60,timer,0);
-}
+float ugaoLonca = 0.0;
 
 // funkcije akcije tastature
 // ovde prvo na klik 'j' i 'l' pomeramo kameru levo desno
+// na 'a' i 'd' pomeramo loncic levo i desno
+// na ESC dugme se prekida kod, a na 's' je start
 void keyboardFunction(unsigned char key, int x, int y) {
-    if(key == 'j') {
+    if(key == 'j' and flagStart) {
         ugao += 0.01;
     }
-    if(key == 'l') {
+    if(key == 'l' and flagStart) {
         ugao -= 0.01;
     }
-    if(key == 'a' and lonacTekuci > -8.0) {
-        lonacTekuci -= 4;
+    if(key == 'a' and lonacTekuci > -8.0 and flagStart) {
+        if(!flagAkcija) {
+            gdeDolazimo = lonacTekuci - 4.0;
+            flagAkcija = true;
+            glutTimerFunc(MOTION_INTERVAL,onTimer,0);
+        }
     }
-    if(key == 'd' and lonacTekuci < 8.0) {
-        lonacTekuci += 4;
+    if(key == 'd' and lonacTekuci < 8.0 and flagStart) {
+        if(!flagAkcija) {
+            gdeDolazimo = lonacTekuci + 4.0;
+            flagAkcija = true;
+            glutTimerFunc(MOTION_INTERVAL,onTimer,0);
+        }
     }
-}
-
-// prototip kotlica, koji ce imati i toruse na sebi, animaciju rotiranja, osencenje
-void crtajLonac() {
-    glColor3f(0.5,0.5,0.5);
-    double clipPovrs[] = {0, -1, 0, 2.5};
-    glPushMatrix();
-        glTranslatef(lonacTekuci,1.75f,0);
-        glutSolidSphere(1.5,40,40);
-    glPopMatrix();
+    if(key == 27) {
+        cout << "Izasli ste iz igrice!" << endl;
+        exit(0);
+    }
+    if(key == 's') {
+        flagStart = true;
+        glutTimerFunc(MOTION_INTERVAL,onTimerMain,1);
+    }
 }
 
 // pozicije na kojim ce se kretati nas lonac
@@ -82,12 +97,13 @@ void crtajOse() {
 
 // funkcija koja renderuje nasu sliku
 void renderFunction() {
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glPushMatrix();
 
         // pogled nase kamere
-        gluLookAt(10*cos(ugao),2,10*sin(ugao),
-                    0, 0, 0,
+        gluLookAt(15*cos(ugao),10,15*sin(ugao),
+                    0, 10, 0,
                     0, 1, 0);
         
         // postavljanje nase platforme za igricu
@@ -101,7 +117,7 @@ void renderFunction() {
 
         crtajOse();
         crtajPozicije();
-        crtajLonac();
+        crtajLonac(lonacTekuci);
 
     glPopMatrix();
 
@@ -114,7 +130,6 @@ void inicijalizujGlut() {
     glMatrixMode(GL_PROJECTION);
     gluPerspective(90.0, 1920.0/2080.0, 0.1, 250.0);
     glMatrixMode(GL_MODELVIEW);
-    timer(60);
 }
 
 int main(int argc, char **argv) {
