@@ -5,6 +5,8 @@
 #include"objekti.hpp"
 
 #define MOTION_INTERVAL 20
+#define BROJ_TELA 4
+#define BROJ_TANJIRA 5
 
 using namespace std;
 
@@ -23,7 +25,22 @@ float gdeDolazimo;
 // pozicije kotlica
 float lonacTekuci = 0;
 
-float ugaoLonca = 0.0;
+float ugaoMain = 0.0;
+
+// indikator kada ce telo da padne
+float vremeZaPadanje = 0;
+
+// 0 - bomba, 1 - paradajz, 2 - sargarepa, 3 - pecurka
+bool koPada[BROJ_TELA];
+// koja je pozicija zauzeta
+bool zauzetPozicija[BROJ_TANJIRA];
+
+float padanjeTela[BROJ_TELA];
+
+float pozicijaBombaVazduh;
+float pozicijaParadajzVazduh;
+float pozicijaSargarepaVazduh;
+float pozicijaPecurkaVazduh;
 
 // funkcije akcije tastature
 // ovde prvo na klik 'j' i 'l' pomeramo kameru levo desno
@@ -60,64 +77,47 @@ void keyboardFunction(unsigned char key, int x, int y) {
     }
 }
 
-// pozicije na kojim ce se kretati nas lonac
-// i gde ce objekti da padaju! Ima ih 5
-void crtajPozicije() {
-    glColor3f(0,0,1);
-    for(int i = -8;i<=8;i+=4) {
-        glPushMatrix();
-            float rastojanje =i;
-            glTranslatef(rastojanje,0,0);
-            glutSolidCube(0.3f);
-        glPopMatrix();
-    }
-}
-
-// funkcija koja crta kordinatne ose
-void crtajOse() {
-    glBegin(GL_LINES);
-
-        // koordinata z
-        glColor3f(0.3,0.7,0.5);
-        glVertex3f(0,0,-500);
-        glVertex3f(0,0,500);
-
-        // koordinata x
-        glColor3f(0.4,0.3,0.5);
-        glVertex3f(500,0,0);
-        glVertex3f(-500,0,0);
-
-        // koordinata y
-        glColor3f(0.4,0.4,0.2);
-        glVertex3f(0,500,0);
-        glVertex3f(0,-500,0);
-
-    glEnd();
-}
 
 // funkcija koja renderuje nasu sliku
 void renderFunction() {
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
     glPushMatrix();
 
         // pogled nase kamere
         gluLookAt(15*cos(ugao),10,15*sin(ugao),
                     0, 10, 0,
                     0, 1, 0);
-        
-        // postavljanje nase platforme za igricu
-        glColor3f(0.2,3,0.2);
-        glBegin(GL_QUADS);
-            glVertex3f(-500,0,-500);
-            glVertex3f(500,0,-500);
-            glVertex3f(500,0,500);
-            glVertex3f(-500,0,500);
-        glEnd();
 
-        crtajOse();
-        crtajPozicije();
+        /* Pozicija svetla (u pitanju je direkcionalno svetlo). */
+        GLfloat light_position[] = { 0,5,3,1 };
+
+        /* Ambijentalna boja svetla. */
+        GLfloat light_ambient[] = { 0.0, 0.0, 0.0, 1 };
+
+        /* Difuzna boja svetla. */
+        GLfloat light_diffuse[] = { 0.7, 0.7, 0.7, 1 };
+
+        /* Spekularna boja svetla. */
+        GLfloat light_specular[] = { 0.9, 0.9, 0.9, 1 };
+
+        glEnable(GL_LIGHTING);
+        glEnable(GL_LIGHT0);
+
+        glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+        glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
+        glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+        glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+
+        crtajPecurku();
+        crtajParadajz();
+        crtajTanjire();
+        crtajSargarepu();
+        crtajBombu();
         crtajLonac(lonacTekuci);
+        crtajSto();
 
     glPopMatrix();
 
@@ -134,8 +134,14 @@ void inicijalizujGlut() {
 
 int main(int argc, char **argv) {
     glutInit(&argc,argv);
+    
+    // inicijalizacija nizova
+    for(int i = 0; i < BROJ_TELA; i++ ) {
+        koPada[i] = false;
+    }
+
     glutInitWindowSize(1920,1080);
-    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
+    glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
     glutCreateWindow("CATCH THEM ALL!!!");
     inicijalizujGlut();
     glutDisplayFunc(renderFunction);
