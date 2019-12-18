@@ -2,11 +2,15 @@
 #include<GL/gl.h>
 #include<GL/glut.h>
 #include<math.h>
+#include<vector>
 #include"objekti.hpp"
+#include<time.h>
 
 #define MOTION_INTERVAL 20
 #define BROJ_TELA 4
 #define BROJ_TANJIRA 5
+
+int timerInterval = 0;
 
 using namespace std;
 
@@ -41,6 +45,16 @@ float pozicijaBombaVazduh;
 float pozicijaParadajzVazduh;
 float pozicijaSargarepaVazduh;
 float pozicijaPecurkaVazduh;
+int brojZauzetihMesta = 0;
+
+int propusetno = 0;
+int imamoParadajz = 0;
+int imamoPecurku = 0;
+int imamoSargarepu = 0;
+int ispaljenObjekat = 0;
+float dodatakTezini = 0.0;
+
+vector<niz_element> niz;
 
 // funkcije akcije tastature
 // ovde prvo na klik 'j' i 'l' pomeramo kameru levo desno
@@ -72,8 +86,14 @@ void keyboardFunction(unsigned char key, int x, int y) {
         exit(0);
     }
     if(key == 's') {
-        flagStart = true;
-        glutTimerFunc(MOTION_INTERVAL,onTimerMain,1);
+        if(flagStart != true) {
+            flagStart = true;
+            glutTimerFunc(MOTION_INTERVAL,onTimerMain,1);
+        }
+    }
+    if(key>='0' &&  key<='4'){
+        if(niz[key-'0'].tip==-1)
+        niz[key-'0'].tip=1;
     }
 }
 
@@ -83,11 +103,10 @@ void renderFunction() {
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
     glPushMatrix();
 
         // pogled nase kamere
-        gluLookAt(15*cos(ugao),10,15*sin(ugao),
+        gluLookAt(0,10,15,
                     0, 10, 0,
                     0, 1, 0);
 
@@ -111,13 +130,39 @@ void renderFunction() {
         glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
         glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
 
-        crtajPecurku();
-        crtajParadajz();
         crtajTanjire();
-        crtajSargarepu();
-        crtajBombu();
         crtajLonac(lonacTekuci);
         crtajSto();
+
+        // novi deo koda koji odredjuje interval kada iscrtavamo
+        // samo iscrtavamo paradajz
+
+        if(flagStart == true) {
+            timerInterval++;
+        }
+        if(timerInterval%100 == 0 && flagStart == true) {
+            srand(time(NULL));
+            int biramoMesto = rand()%5;
+            int biramoTip = rand()%4;
+            if(niz[biramoMesto].zauzet == false && brojZauzetihMesta < 5){
+                niz[biramoMesto].tip = biramoTip;
+                niz[biramoMesto].x_pos = -8 + biramoMesto*4 ;
+                niz[biramoMesto].zauzet = true;
+                niz[biramoMesto].y_pos = 30;
+                brojZauzetihMesta += 1;
+                ispaljenObjekat += 1;
+                if(ispaljenObjekat % 5 == 0)  {
+                    ispaljenObjekat += 1;
+                    dodatakTezini += 0.03;
+                }
+            }
+        }
+        for(int i=0;i<niz.size();i++) {
+            if(niz[i].tip!=-1 && flagStart == true) {
+                crtaj(niz[i],dodatakTezini);
+            }
+        }
+    
 
     glPopMatrix();
 
@@ -134,15 +179,15 @@ void inicijalizujGlut() {
 
 int main(int argc, char **argv) {
     glutInit(&argc,argv);
-    
-    // inicijalizacija nizova
-    for(int i = 0; i < BROJ_TELA; i++ ) {
-        koPada[i] = false;
-    }
 
     glutInitWindowSize(1920,1080);
     glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
     glutCreateWindow("CATCH THEM ALL!!!");
+    
+    brojZauzetihMesta = 0;
+    for(int i=-8;i<=8;i=i+4) {
+        niz.push_back({(float)i,30,-1,false});
+    }
     inicijalizujGlut();
     glutDisplayFunc(renderFunction);
     glutKeyboardFunc(keyboardFunction);

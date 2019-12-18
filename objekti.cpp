@@ -181,7 +181,7 @@ void drugaDrska(float lonacTekuci) {
     glDisable(GL_LIGHTING);
 }
 
-void crtajBombu() {
+void crtajBombu(float x,float y) {
 
     glEnable(GL_LIGHTING);
 
@@ -203,7 +203,7 @@ void crtajBombu() {
     glMaterialf(GL_FRONT, GL_SHININESS, shininess);
 
     glPushMatrix();
-        glTranslatef(-4,1.2,0);
+        glTranslatef(x,y,0);
         glRotatef(ugaoMain,1,1,0); 
         crtajFitilj();
         crtajDrskuBombe();
@@ -246,6 +246,38 @@ void crtajDrskuBombe() {
     glDisable(GL_LIGHTING);
 }
 
+void crtajFitilj() {
+
+    glEnable(GL_LIGHTING);
+
+    /* Koeficijenti ambijentalne refleksije materijala. */
+    GLfloat ambient_coeffs[] = { 0.5, 0, 0, 1 };
+
+    /* Koeficijenti difuzne refleksije materijala. */
+    GLfloat diffuse_coeffs[] = { 0.6, 0.6, 0.6, 1 };
+
+    /* Koeficijenti spekularne refleksije materijala. */
+    GLfloat specular_coeffs[] = { 1, 1, 1, 1 };
+
+    /* Koeficijent glatkosti materijala. */
+    GLfloat shininess = 100;
+
+    glMaterialfv(GL_FRONT, GL_AMBIENT, ambient_coeffs);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse_coeffs);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, specular_coeffs);
+    glMaterialf(GL_FRONT, GL_SHININESS, shininess);
+
+    glPushMatrix();
+        glTranslatef(0, 0.8, -0.3);        
+        glRotatef(235,1,0,0);
+        glutSolidCylinder(0.05,0.6,40,40);
+        glutPostRedisplay();
+    glPopMatrix();
+
+    glDisable(GL_LIGHTING);
+}
+
+
 void crtajSupu() {
 
     glEnable(GL_LIGHTING);
@@ -278,36 +310,6 @@ void crtajSupu() {
 }
 
 
-void crtajFitilj() {
-
-    glEnable(GL_LIGHTING);
-
-    /* Koeficijenti ambijentalne refleksije materijala. */
-    GLfloat ambient_coeffs[] = { 0.5, 0, 0, 1 };
-
-    /* Koeficijenti difuzne refleksije materijala. */
-    GLfloat diffuse_coeffs[] = { 0.6, 0.6, 0.6, 1 };
-
-    /* Koeficijenti spekularne refleksije materijala. */
-    GLfloat specular_coeffs[] = { 1, 1, 1, 1 };
-
-    /* Koeficijent glatkosti materijala. */
-    GLfloat shininess = 100;
-
-    glMaterialfv(GL_FRONT, GL_AMBIENT, ambient_coeffs);
-    glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse_coeffs);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, specular_coeffs);
-    glMaterialf(GL_FRONT, GL_SHININESS, shininess);
-
-    glPushMatrix();
-        glTranslatef(0, 0.8, -0.3);        
-        glRotatef(235,1,0,0);
-        glutSolidCylinder(0.05,0.8,40,40);
-        glutPostRedisplay();
-    glPopMatrix();
-
-    glDisable(GL_LIGHTING);
-}
 
 void crtajTanjire() {
 
@@ -342,12 +344,12 @@ void crtajTanjire() {
     glDisable(GL_LIGHTING);
 }
 
-void crtajSargarepu() {
+void crtajSargarepu(float x,float y) {
 
     glEnable(GL_LIGHTING);
 
     glPushMatrix();
-        glTranslatef(4,2,0);
+        glTranslatef(x,y,0);
         glRotatef(ugaoMain,0,1,1);
         crtajPeteljkaSargarepe();
         glEnable(GL_LIGHTING);
@@ -438,10 +440,10 @@ void crtajSto() {
     glDisable(GL_LIGHTING);
 }
 
-void crtajParadajz() {
+void crtajParadajz(float x, float y) {
 
     glPushMatrix();
-        glTranslatef(8,1.1,0);
+        glTranslatef(x,y,0);
         glRotatef(ugaoMain,1,0,0);
 
 
@@ -503,14 +505,11 @@ void crtajPeteljkaParadajz() {
     glDisable(GL_LIGHTING);
 }
 
-void crtajPecurku() {
-    double clipPovrsPecurka[] = {0, 1, 0, 1};
+void crtajPecurku(float x,float y) {
 
     glPushMatrix();
-        glClipPlane(GL_CLIP_PLANE1,clipPovrsPecurka);
-        glEnable(GL_CLIP_PLANE1);
-        glTranslatef(-8,1.3,0);
-        glRotatef(ugaoMain,0,1,0);
+        glTranslatef(x,y,0);
+        glRotatef(ugaoMain,0,1,1);
         crtajStabloPecurke();
         
         glEnable(GL_LIGHTING);
@@ -522,7 +521,7 @@ void crtajPecurku() {
         GLfloat diffuse_coeffs[] = { 1, 0.8, 0.6, 1 };
 
         /* Koeficijenti spekularne refleksije materijala. */
-        GLfloat specular_coeffs[] = { 1, 1, 1, 1 };
+        GLfloat specular_coeffs[] = { 1, 1, 1, 0 };
 
         /* Koeficijent glatkosti materijala. */
         GLfloat shininess = 100;
@@ -532,15 +531,95 @@ void crtajPecurku() {
         glMaterialfv(GL_FRONT, GL_SPECULAR, specular_coeffs);
         glMaterialf(GL_FRONT, GL_SHININESS, shininess);
 
-        glScalef(1,0.7,1);
+        glScalef(0.8,0.7,1);
         glutSolidSphere(0.8,40,40);
         glutPostRedisplay();
-        glDisable(GL_CLIP_PLANE1);
     glPopMatrix();
 
     glDisable(GL_LIGHTING);
 }
 
 void crtajStabloPecurke() {
+    glEnable(GL_LIGHTING);
 
+    /* Koeficijenti ambijentalne refleksije materijala. */
+    GLfloat ambient_coeffs[] = { 1, 0.9, 0.3, 1 };
+
+    /* Koeficijenti difuzne refleksije materijala. */
+    GLfloat diffuse_coeffs[] = { 1, 0.8, 0.6, 1 };
+
+    /* Koeficijenti spekularne refleksije materijala. */
+    GLfloat specular_coeffs[] = { 1, 1, 1, 1 };
+
+    /* Koeficijent glatkosti materijala. */
+    GLfloat shininess = 100;
+
+    glMaterialfv(GL_FRONT, GL_AMBIENT, ambient_coeffs);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse_coeffs);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, specular_coeffs);
+    glMaterialf(GL_FRONT, GL_SHININESS, shininess);
+    glPushMatrix();
+        glRotatef(90,0,1,0);
+        glutSolidCylinder(0.4,0.8,40,40);
+    glPopMatrix();
+    glDisable(GL_LIGHTING);
+}
+
+void crtaj(niz_element &ne, float dodatakTezini){
+    ne.y_pos -= 0.05 + dodatakTezini;
+    // promena iscrtavamo paradajz ceo
+    if(ne.tip == 0) {
+        crtajBombu(ne.x_pos,ne.y_pos);
+    }
+    if(ne.tip==1){
+		crtajParadajz(ne.x_pos,ne.y_pos);        
+    }
+    if(ne.tip==2){
+        crtajSargarepu(ne.x_pos,ne.y_pos);
+    }
+    if(ne.tip==3){
+        crtajPecurku(ne.x_pos,ne.y_pos);
+    }
+    if(ne.y_pos<=1.0){
+        if(ne.tip != 0) {
+            propusetno += 1;
+            if(propusetno == 3) {
+                cout << "IZGUBIO SI! PALO TI JE VISE OD 3 POVRCA" << endl;
+                exit(0);
+            }
+        }
+        ne.y_pos=30;
+        ne.tip=-1;
+        ne.zauzet = false;
+        brojZauzetihMesta -= 1;
+    }
+    if((int)ne.x_pos == lonacTekuci && (ne.y_pos > 0  && ne.y_pos < 2)) {
+        if(ne.tip == 0) {
+            cout << "IZGUBIO SI! PALA JE BOMBA NA TEBE" << endl;
+            exit(0);
+        }
+        else {
+            if(ne.tip == 1) {
+                if(imamoParadajz != 20) 
+                    imamoParadajz += 1;
+            }
+            if(ne.tip == 2) {
+                if(imamoSargarepu != 20)
+                    imamoSargarepu += 1;
+            }
+            if(ne.tip == 3) {
+                if(imamoPecurku != 20)
+                    imamoPecurku += 1;
+            }
+        }
+        if(imamoParadajz == 20 && imamoPecurku == 20 && imamoSargarepu == 20) {
+            cout << "POBEDIO SI! SAKUPIO SI 20 KOMADA OD SVAKOG POVRCA" << endl;
+            exit(1);
+        }
+        ne.y_pos=30;
+        ne.tip=-1;
+        ne.zauzet = false;
+        brojZauzetihMesta -= 1;
+    }
+    glutPostRedisplay();
 }

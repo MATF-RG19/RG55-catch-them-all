@@ -14,11 +14,27 @@ extern float ugaoMain;
 extern float ugaoDrskeJedan;
 extern float ugaoDrskeDva;
 extern float vremeZaPadanje;
+extern int brojZauzetihMesta;
 
 extern float polozajPadajucihTela[BROJ_TANJIRA];
 extern bool zauzetPozicija[BROJ_TANJIRA];
 extern float pozicijaUVazduhu[BROJ_TANJIRA];
 extern bool koPada[BROJ_TELA];
+
+extern int propusetno;
+extern int imamoParadajz;
+extern int imamoPecurku;
+extern int imamoSargarepu;
+extern int ispaljenObjekat;
+extern float dodatakTezini;
+
+// tipovi -> 0 je bomba, 1 je paradajz, 2 je sargarepa, 3 je pecurka
+struct niz_element{
+    float x_pos;
+    float y_pos;
+    int tip;
+    bool zauzet;
+};
 
 // onTimer funkcija za transliranje lonca
 void onTimer(int val);
@@ -70,4 +86,6 @@ void crtajSupu();
 
 // crtamo sto(platforma igre)
 void crtajSto();
+
+void crtaj(niz_element &ne, float dodatakTezini);
 #endif
