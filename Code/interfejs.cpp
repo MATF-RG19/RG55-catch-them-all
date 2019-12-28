@@ -50,7 +50,7 @@ void interfejsStart() {
     glEnable(GL_LIGHTING_BIT);
 
     string txt = "CATCH THEM ALL - THE SOUP GAME";
-    string txt1 = "Budite i vi vas personalni lonac i sakupljajte povrce koje padaju.";
+    string txt1 = "Budite i vi vas personalni lonac i sakupljajte povrce(pecurka included) koje pada.";
     string txt2 = "Morate da sakupite odvojeno 20 sargarepa, pecuraka i paradajza.";
     string txt3 = "Ako vas pogodi bomba ili vam je palo 3 namirnica na sto, izgubili ste!!!";
     string txt4 = "UPUTSTVA ZA IGRU:";
