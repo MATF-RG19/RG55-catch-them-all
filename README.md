@@ -7,8 +7,7 @@ Kontrole:
 * <- - krecemo se levo
 * -> - krecemo se desno
 * S - pokrecemo igru
-* J - okrecemo kameru na levo
-* L - okrecemo kameru na desno
+* R - restartujemo igru
 * ESC - izlazimo iz igre
 
 NAPOMENA: Okretanje kamere bice izbaceno iz igre jer cemo da gledamo lonac sa fiksiranog polozaja
