@@ -6,6 +6,7 @@
 
 using namespace std;
 
+// ova funkcija je preuzeta od kolege Mihajla Ilica
 unsigned int ucitaj_sliku(const char* path) {
     FILE *file=fopen(path,"rb");
     if(file==NULL){
