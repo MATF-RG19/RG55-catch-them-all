@@ -98,5 +98,7 @@ void crtajSto();
 
 void crtajEksploziju();
 
+void crtajZid();
+
 void crtaj(niz_element &ne, float dodatakTezini,bool restartBrisi);
 #endif

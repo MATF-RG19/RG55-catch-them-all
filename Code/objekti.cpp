@@ -25,13 +25,13 @@ void onTimer(int val) {
     }
     if(gdeDolazimo < lonacTekuci) {
         // idemo u levo
-        if(lonacTekuci - 0.8 < gdeDolazimo) {
+        if(lonacTekuci - 1 <= gdeDolazimo) {
             lonacTekuci = gdeDolazimo;
             flagAkcija = false;
             return;
         }
         else {
-            lonacTekuci -= 0.8;
+            lonacTekuci -= 1;
             glutPostRedisplay();
             if(flagAkcija) {
                 glutTimerFunc(MOTION_INTERVAL,onTimer,TIMER_TRANSLIRANJA_LONCA);
@@ -40,13 +40,13 @@ void onTimer(int val) {
     }
     else {
         // idemo u desno 
-        if(lonacTekuci + 0.8 > gdeDolazimo) {
+        if(lonacTekuci + 1 >= gdeDolazimo) {
             lonacTekuci = gdeDolazimo;
             flagAkcija = false;
             return;
         }
         else {
-            lonacTekuci += 0.8;
+            lonacTekuci += 1;
             glutPostRedisplay();
             if(flagAkcija) {
                 glutTimerFunc(MOTION_INTERVAL,onTimer,TIMER_TRANSLIRANJA_LONCA);
@@ -71,7 +71,7 @@ void onTimerMain(int val) {
     
     if(eksplozijaSiri == true) {
         eksplozijaTimer += 1;
-        if(eksplozijaTimer == 50) {
+        if(eksplozijaTimer == 40) {
             eksplozijaSkuplja = true;
             eksplozijaSiri = false;
             izvrniLonac = 0;
@@ -362,22 +362,22 @@ void crtajSargarepu(float x,float y,float z) {
     glEnable(GL_LIGHTING);
 
     glPushMatrix();
-        glTranslatef(x,y,z);
+        glTranslatef(x+0.3,y,z);
         glRotatef(ugaoMain,0,1,1);
         crtajPeteljkaSargarepe();
         glEnable(GL_LIGHTING);
 
         /* Koeficijenti ambijentalne refleksije materijala. */
-        GLfloat ambient_coeffs[] = { 1, 0.6, 0.1, 1 };
+        GLfloat ambient_coeffs[] = { 0.7, 0.4, 0.1, 1 };
 
         /* Koeficijenti difuzne refleksije materijala. */
-        GLfloat diffuse_coeffs[] = { 0.6, 0.6, 0.2, 1 };
+        GLfloat diffuse_coeffs[] = { 0.7, 0.4, 0.1, 1 };
 
         /* Koeficijenti spekularne refleksije materijala. */
-        GLfloat specular_coeffs[] = { 1, 1, 1, 1 };
+        GLfloat specular_coeffs[] = { 0, 0, 0, 1 };
 
         /* Koeficijent glatkosti materijala. */
-        GLfloat shininess = 100;
+        GLfloat shininess = 10;
 
         glMaterialfv(GL_FRONT, GL_AMBIENT, ambient_coeffs);
         glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse_coeffs);
@@ -385,7 +385,7 @@ void crtajSargarepu(float x,float y,float z) {
         glMaterialf(GL_FRONT, GL_SHININESS, shininess);
 
 
-        glutSolidCone(0.3,2,40,40);
+        glutSolidCone(0.3,1.4,40,40);
         glutPostRedisplay();
     glPopMatrix();
 
@@ -400,13 +400,13 @@ void crtajPeteljkaSargarepe() {
     GLfloat ambient_coeffs[] = { 0.1, 1, 0.1, 1 };
 
     /* Koeficijenti difuzne refleksije materijala. */
-    GLfloat diffuse_coeffs[] = { 0.6, 0.6, 0.2, 1 };
+    GLfloat diffuse_coeffs[] = { 0.1, 1, 0.1, 1 };
 
     /* Koeficijenti spekularne refleksije materijala. */
-    GLfloat specular_coeffs[] = { 1, 1, 1, 1 };
+    GLfloat specular_coeffs[] = { 0, 0, 0, 1 };
 
     /* Koeficijent glatkosti materijala. */
-    GLfloat shininess = 100;
+    GLfloat shininess = 10;
 
     glMaterialfv(GL_FRONT, GL_AMBIENT, ambient_coeffs);
     glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse_coeffs);
@@ -422,43 +422,12 @@ void crtajPeteljkaSargarepe() {
 }
 
 
-void crtajSto() {
-
-    glEnable(GL_LIGHTING);
-
-    /* Koeficijenti ambijentalne refleksije materijala. */
-    GLfloat ambient_coeffs[] = { 0.7, 0.2, 0.2, 1 };
-
-    /* Koeficijenti difuzne refleksije materijala. */
-    GLfloat diffuse_coeffs[] = { 0.2, 0.2, 0.2, 1 };
-
-    /* Koeficijenti spekularne refleksije materijala. */
-    GLfloat specular_coeffs[] = { 0, 0, 0, 1 };
-
-    /* Koeficijent glatkosti materijala. */
-    GLfloat shininess = 100;
-
-    glMaterialfv(GL_FRONT, GL_AMBIENT, ambient_coeffs);
-    glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse_coeffs);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, specular_coeffs);
-    glMaterialf(GL_FRONT, GL_SHININESS, shininess);
-
-    glPushMatrix();
-        glTranslatef(0,-2,0);
-        glScalef(1,0.1,0.9);
-        glutSolidCube(40);
-        glutPostRedisplay();
-    glPopMatrix();
-
-    glDisable(GL_LIGHTING);
-}
-
 void crtajParadajz(float x, float y,float z) {
 
     glPushMatrix();
         glTranslatef(x,y,z);
-        glRotatef(ugaoMain,1,0,0);
-
+        glRotatef(ugaoMain,1,1,0);
+        glScalef(0.7,0.9,0.9);
 
         crtajPeteljkaParadajz();
 
@@ -474,14 +443,13 @@ void crtajParadajz(float x, float y,float z) {
         GLfloat specular_coeffs[] = { 0, 0, 0, 1 };
 
         /* Koeficijent glatkosti materijala. */
-        GLfloat shininess = 10;
+        GLfloat shininess = 0;
 
         glMaterialfv(GL_FRONT, GL_AMBIENT, ambient_coeffs);
         glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse_coeffs);
         glMaterialfv(GL_FRONT, GL_SPECULAR, specular_coeffs);
         glMaterialf(GL_FRONT, GL_SHININESS, shininess);
 
-        glScalef(1,0.7,1);
         glutSolidSphere(1,40,40);
         glutPostRedisplay();
     glPopMatrix();
@@ -496,13 +464,13 @@ void crtajPeteljkaParadajz() {
     GLfloat ambient_coeffs[] = { 0.1, 1, 0.1, 1 };
 
     /* Koeficijenti difuzne refleksije materijala. */
-    GLfloat diffuse_coeffs[] = { 0.6, 0.6, 0.2, 1 };
+    GLfloat diffuse_coeffs[] = { 0.2, 0.6, 0.2, 1 };
 
     /* Koeficijenti spekularne refleksije materijala. */
-    GLfloat specular_coeffs[] = { 1, 1, 1, 1 };
+    GLfloat specular_coeffs[] = { 0, 0, 0, 1 };
 
     /* Koeficijent glatkosti materijala. */
-    GLfloat shininess = 100;
+    GLfloat shininess = 10;
 
     glMaterialfv(GL_FRONT, GL_AMBIENT, ambient_coeffs);
     glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse_coeffs);
@@ -522,29 +490,29 @@ void crtajPecurku(float x,float y,float z) {
 
     glPushMatrix();
         glTranslatef(x,y,z);
-        glRotatef(ugaoMain,0,1,1);
+        glRotatef(ugaoMain,1,1,1);
         crtajStabloPecurke();
         
         glEnable(GL_LIGHTING);
 
         /* Koeficijenti ambijentalne refleksije materijala. */
-        GLfloat ambient_coeffs[] = { 1, 0.9, 0.3, 1 };
+        GLfloat ambient_coeffs[] = { 0.5, 0.4, 0.1, 1 };
 
         /* Koeficijenti difuzne refleksije materijala. */
-        GLfloat diffuse_coeffs[] = { 1, 0.8, 0.6, 1 };
+        GLfloat diffuse_coeffs[] = { 0.5, 0.4, 0.1, 1 };
 
         /* Koeficijenti spekularne refleksije materijala. */
-        GLfloat specular_coeffs[] = { 1, 1, 1, 0 };
+        GLfloat specular_coeffs[] = { 0, 0, 0, 0 };
 
         /* Koeficijent glatkosti materijala. */
-        GLfloat shininess = 100;
+        GLfloat shininess = 10;
 
         glMaterialfv(GL_FRONT, GL_AMBIENT, ambient_coeffs);
         glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse_coeffs);
         glMaterialfv(GL_FRONT, GL_SPECULAR, specular_coeffs);
         glMaterialf(GL_FRONT, GL_SHININESS, shininess);
 
-        glScalef(0.8,0.7,1);
+        glScalef(0.6,0.7,0.9);
         glutSolidSphere(0.8,40,40);
         glutPostRedisplay();
     glPopMatrix();
@@ -562,10 +530,10 @@ void crtajStabloPecurke() {
     GLfloat diffuse_coeffs[] = { 1, 0.8, 0.6, 1 };
 
     /* Koeficijenti spekularne refleksije materijala. */
-    GLfloat specular_coeffs[] = { 1, 1, 1, 1 };
+    GLfloat specular_coeffs[] = { 0.3, 0.3, 0.3, 1 };
 
     /* Koeficijent glatkosti materijala. */
-    GLfloat shininess = 100;
+    GLfloat shininess = 10;
 
     glMaterialfv(GL_FRONT, GL_AMBIENT, ambient_coeffs);
     glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse_coeffs);
@@ -592,7 +560,7 @@ void crtajEksploziju() {
     GLfloat specular_coeffs[] = { 1, 1, 1, 0 };
 
     /* Koeficijent glatkosti materijala. */
-    GLfloat shininess = 100;
+    GLfloat shininess = 50;
 
     glMaterialfv(GL_FRONT, GL_AMBIENT, ambient_coeffs);
     glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse_coeffs);
@@ -600,11 +568,71 @@ void crtajEksploziju() {
     glMaterialf(GL_FRONT, GL_SHININESS, shininess);
     glPushMatrix();
         glTranslatef(lonacTekuci,1.75,0);
-        glutSolidSphere(2.5*eksplozijaTimer/50.0,40,40);
+        glutSolidSphere(2.5*eksplozijaTimer/40.0,40,40);
         glutPostRedisplay();
     glPopMatrix();
 
     glDisable(GL_LIGHTING);
+}
+
+void crtajSto() {
+
+    glEnable(GL_LIGHTING);
+
+    /* Koeficijenti ambijentalne refleksije materijala. */
+    GLfloat ambient_coeffs[] = { 0.4, 0.2, 0.1, 1 };
+
+    /* Koeficijenti difuzne refleksije materijala. */
+    GLfloat diffuse_coeffs[] = { 0.2, 0.15, 0.1, 1 };
+
+    /* Koeficijenti spekularne refleksije materijala. */
+    GLfloat specular_coeffs[] = { 0, 0, 0, 1 };
+
+    /* Koeficijent glatkosti materijala. */
+    GLfloat shininess = 0;
+
+    glMaterialfv(GL_FRONT, GL_AMBIENT, ambient_coeffs);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse_coeffs);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, specular_coeffs);
+    glMaterialf(GL_FRONT, GL_SHININESS, shininess);
+
+    glPushMatrix();
+        glTranslatef(0,-2,0);
+        glScalef(1,0.1,0.9);
+        glutSolidCube(25);
+        glutPostRedisplay();
+    glPopMatrix();
+
+    glDisable(GL_LIGHTING);
+}
+
+void crtajZid() {
+    glEnable(GL_LIGHTING);
+
+    /* Koeficijenti ambijentalne refleksije materijala. */
+    GLfloat ambient_coeffs[] = {0,0,0,1};
+
+    /* Koeficijenti difuzne refleksije materijala. */
+    GLfloat diffuse_coeffs[] = {0.1,1,0,1};
+
+    /* Koeficijenti spekularne refleksije materijala. */        
+    GLfloat specular_coeffs[] = { 0, 0, 0, 1 };
+
+    /* Koeficijent glatkosti materijala. */
+    GLfloat shininess = 0;
+
+    glMaterialfv(GL_FRONT, GL_AMBIENT, ambient_coeffs);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse_coeffs);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, specular_coeffs);
+    glMaterialf(GL_FRONT, GL_SHININESS, shininess);
+    glPushMatrix();
+        glTranslatef(2.7,30,-40.2);
+        glScalef(1,1,0.0001);
+        glutSolidCube(85);
+        glutPostRedisplay();
+    glPopMatrix();
+
+    glDisable(GL_LIGHTING);    
 }
 
 void crtaj(niz_element &ne, float dodatakTezini, bool restartBrisi){
@@ -635,7 +663,7 @@ void crtaj(niz_element &ne, float dodatakTezini, bool restartBrisi){
         ne.zauzet = false;
         brojZauzetihMesta -= 1;
     }
-    if((int)ne.x_pos == lonacTekuci && (ne.y_pos > 0  && ne.y_pos < 2)) {
+    if((ne.x_pos < lonacTekuci + 1 && ne.x_pos > lonacTekuci - 1 ) && (ne.y_pos > 0  && ne.y_pos < 2.3)) {
         if(ne.tip == 0) {
             izgubioIgru = true;
             pogodjenBombom = true;

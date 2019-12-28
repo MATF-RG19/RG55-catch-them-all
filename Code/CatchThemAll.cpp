@@ -4,9 +4,13 @@
 #include<math.h>
 #include<vector>
 #include<time.h>
+#include<string>
+#include<cstdio>
+#include<cstring>
 
 #include"objekti.hpp"
 #include"interfejs.hpp"
+#include"teksture.hpp"
 
 #define MOTION_INTERVAL 20
 #define BROJ_TELA 4
@@ -15,6 +19,14 @@
 int timerInterval = 0;
 
 using namespace std;
+
+// indeksi za generisanje slika
+unsigned int index1 = 0;
+unsigned int index2 = 0;
+unsigned int index3 = 0;
+unsigned int index4 = 0;
+unsigned int index5 = 0;
+unsigned int index6 = 0;
 
 // ugao kamere
 float ugao = 90;
@@ -44,6 +56,7 @@ int imamoPecurku = 0;
 int imamoSargarepu = 0;
 int ispaljenObjekat = 0;
 float dodatakTezini = 0.0;
+int ispustanjeInterval = 100;
 
 // flagovi za igru, da li smo pobedili, pogodjeni smo bombom ili smo promasili povrce
 bool pogodjenBombom = false;
@@ -83,10 +96,12 @@ void keyboardFunction(unsigned char key, int x, int y) {
         propusetno = 0;
         timerInterval = 0;
         dodatakTezini = 0;
+        ispustanjeInterval = 100;
         izgubioIgru = false;
         pogodjenBombom = false;
         eksplozijaSiri = false;
         eksplozijaSkuplja = false;
+        pobedioIgru = false;
         izvrniLonac = 1;
         promasioPovrce = false;
         lonacTekuci = 0;
@@ -129,7 +144,6 @@ void SpecialInput(int key, int x, int y) {
 void renderFunction() {
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
     glPushMatrix();
 
         // pogled nase kamere
@@ -139,7 +153,7 @@ void renderFunction() {
 
 
         /* Pozicija svetla (u pitanju je direkcionalno svetlo). */
-        GLfloat light_position[] = { 0,7,2,1 };
+        GLfloat light_position[] = { 0,8,3,1 };
 
         /* Ambijentalna boja svetla. */
         GLfloat light_ambient[] = { 0.0, 0.0, 0.0, 1 };
@@ -169,16 +183,16 @@ void renderFunction() {
                 prozorEnd();
             }
             if(!izgubioIgru) {
-                crtajPecurku(-8.8,20,4);
-                crtajParadajz(-8.9,17,4);
-                crtajSargarepu(-8.8,13,4);
+                crtajPecurku(-8.8,19,4);
+                crtajParadajz(-8.9,16,4);
+                crtajSargarepu(-8.8,12,4);
                 interfejsIgra();
-                prozorIgra();
             }
             crtajTanjire();
             if(!promasioPovrce) {
                 crtajLonac(lonacTekuci);
             }
+            
 
             // novi deo koda koji odredjuje interval kada iscrtavamo
             // samo iscrtavamo paradajz
@@ -195,7 +209,7 @@ void renderFunction() {
             if(flagStart == true && !izgubioIgru && !restartBrisi) {
                 timerInterval++;
             }
-            if(timerInterval%100 == 0 && flagStart == true && !izgubioIgru && !restartBrisi) {
+            if(timerInterval%ispustanjeInterval == 0 && flagStart == true && !izgubioIgru && !restartBrisi && !pobedioIgru) {
                 srand(time(NULL));
                 int biramoMesto = rand()%5;
                 int biramoTip = rand()%4;
@@ -204,32 +218,39 @@ void renderFunction() {
                     niz[biramoMesto].x_pos = -8 + biramoMesto*4 ;
                     niz[biramoMesto].zauzet = true;
                     niz[biramoMesto].y_pos = 30;
-                    brojZauzetihMesta += 1;
+                    if(biramoTip == 0) {
+                        brojZauzetihMesta += 1;
+                    } 
                     ispaljenObjekat += 1;
-                    if(ispaljenObjekat % 5 == 0)  {
+                    if(ispaljenObjekat % 10 == 0)  {
                         ispaljenObjekat += 1;
-                        dodatakTezini += 0.03;
+                        ispustanjeInterval -= 10;
+                        if(ispustanjeInterval == 10) {
+                            ispustanjeInterval = 20;
+                        }
+                        dodatakTezini += 0.05;
                     }
                 }
             }
             for(int i=0;i<niz.size();i++) {
-                if(niz[i].tip!=-1 && flagStart == true && !izgubioIgru) {
+                if(niz[i].tip!=-1 && flagStart == true && !izgubioIgru && !pobedioIgru) {
                     crtaj(niz[i],dodatakTezini,restartBrisi);
                 }
             }
             if(eksplozijaSiri == true || eksplozijaSkuplja == true) {
                 crtajEksploziju();
             }
-            
+            crtajZid();
+            pod();
+            vrata();
             crtajSto();
         }
     glPopMatrix();
-
     glutSwapBuffers();
 }
 
 void inicijalizujGlut() {
-    glClearColor(0.8,0.8,0.5,0);
+    glClearColor(1,0.9,0.2,0);
     glEnable(GL_DEPTH_TEST);
     glMatrixMode(GL_PROJECTION);
     gluPerspective(90.0, 1920.0/2080.0, 0.1, 250.0);
@@ -247,7 +268,23 @@ int main(int argc, char **argv) {
     for(int i=-8;i<=8;i=i+4) {
         niz.push_back({(float)i,30,-1,false});
     }
+
+    glEnable(GL_TEXTURE_2D);
+    string putanja1 = "../Slike/1.bmp";
+    index1 = ucitaj_sliku(putanja1.c_str()); // vrata
+    string putanja2 = "../Slike/2.bmp";
+    index2 = ucitaj_sliku(putanja2.c_str()); // patos
+    string putanja3 = "../Slike/3.bmp";
+    index3 = ucitaj_sliku(putanja3.c_str()); // Remzi start meni
+    string putanja4 = "../Slike/4.bmp";
+    index4 = ucitaj_sliku(putanja4.c_str()); // Remzi pobedio igru
+    string putanja5 = "../Slike/5.bmp";
+    index5 = ucitaj_sliku(putanja5.c_str()); // Remzi je ljut
+    string putanja6 = "../Slike/6.bmp";
+    index6 = ucitaj_sliku(putanja6.c_str()); // Remzi je ljut part 2
+
     inicijalizujGlut();
+    //glutFullScreen();
     glutDisplayFunc(renderFunction);
     glutKeyboardFunc(keyboardFunction);
     glutSpecialFunc(SpecialInput);
@@ -255,3 +292,4 @@ int main(int argc, char **argv) {
     return 0;
 
 }
+

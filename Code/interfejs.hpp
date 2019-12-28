@@ -40,4 +40,6 @@ void interfejsEnd();
 
 void prozorEnd();
 
+void initTextures();
+
 #endif
