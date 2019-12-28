@@ -183,9 +183,6 @@ void renderFunction() {
                 prozorEnd();
             }
             if(!izgubioIgru) {
-                crtajPecurku(-8.8,19,4);
-                crtajParadajz(-8.9,16,4);
-                crtajSargarepu(-8.8,12,4);
                 interfejsIgra();
             }
             crtajTanjire();
@@ -193,10 +190,6 @@ void renderFunction() {
                 crtajLonac(lonacTekuci);
             }
             
-
-            // novi deo koda koji odredjuje interval kada iscrtavamo
-            // samo iscrtavamo paradajz
-
             if(restartBrisi == true) {
                 if(timerBrisi == 1) {
                     restartBrisi = false;
@@ -212,7 +205,22 @@ void renderFunction() {
             if(timerInterval%ispustanjeInterval == 0 && flagStart == true && !izgubioIgru && !restartBrisi && !pobedioIgru) {
                 srand(time(NULL));
                 int biramoMesto = rand()%5;
-                int biramoTip = rand()%4;
+                bool petlja;
+                int biramoTip;
+                do { // kada smo sakupili 20 pecuraka vise ih nece izbacivati!
+                    biramoTip = rand()%4;
+                    petlja = false;
+                    if(biramoTip == 1 && imamoParadajz == 20) {
+                        petlja = true;
+                    }
+                    if(biramoTip == 2 && imamoSargarepu == 20) {
+                        petlja = true;
+                    }
+                    if(biramoTip == 3 && imamoSargarepu == 20) {
+                        petlja = true;
+                    }
+                } while(petlja);
+
                 if(niz[biramoMesto].zauzet == false && brojZauzetihMesta < 5){
                     niz[biramoMesto].tip = biramoTip;
                     niz[biramoMesto].x_pos = -8 + biramoMesto*4 ;
@@ -225,8 +233,8 @@ void renderFunction() {
                     if(ispaljenObjekat % 10 == 0)  {
                         ispaljenObjekat += 1;
                         ispustanjeInterval -= 10;
-                        if(ispustanjeInterval == 10) {
-                            ispustanjeInterval = 20;
+                        if(ispustanjeInterval == 0) {
+                            ispustanjeInterval = 10;
                         }
                         dodatakTezini += 0.05;
                     }
@@ -250,7 +258,7 @@ void renderFunction() {
 }
 
 void inicijalizujGlut() {
-    glClearColor(1,0.9,0.2,0);
+    glClearColor(0.9,0.6,0.2,0);
     glEnable(GL_DEPTH_TEST);
     glMatrixMode(GL_PROJECTION);
     gluPerspective(90.0, 1920.0/2080.0, 0.1, 250.0);
@@ -284,7 +292,7 @@ int main(int argc, char **argv) {
     index6 = ucitaj_sliku(putanja6.c_str()); // Remzi je ljut part 2
 
     inicijalizujGlut();
-    //glutFullScreen();
+    glutFullScreen();
     glutDisplayFunc(renderFunction);
     glutKeyboardFunc(keyboardFunction);
     glutSpecialFunc(SpecialInput);

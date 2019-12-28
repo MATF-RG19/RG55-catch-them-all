@@ -6,42 +6,28 @@
 
 #include "interfejs.hpp"
 #include "teksture.hpp"
+#include "objekti.hpp"
 
 using namespace std;
 
 static void crtajSrce(){
-    glEnable(GL_LIGHTING);
-    /* Koeficijenti ambijentalne refleksije materijala. */
-    GLfloat ambient_coeffs[] = { 1, 0.1, 0.1, 1 };
-
-    /* Koeficijenti difuzne refleksije materijala. */
-    GLfloat diffuse_coeffs[] = { 1, 0.1, 0.1, 1 };
-
-    /* Koeficijenti spekularne refleksije materijala. */
-    GLfloat specular_coeffs[] = { 0.2, 0, 0, 1 };
-
-    /* Koeficijent glatkosti materijala. */
-    GLfloat shininess = 10;
-
-    glMaterialfv(GL_FRONT, GL_AMBIENT, ambient_coeffs);
-    glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse_coeffs);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, specular_coeffs);
-    glMaterialf(GL_FRONT, GL_SHININESS, shininess);
+    glEnable(GL_LIGHTING_BIT);
+    glColor3f(0.8,0,0);
     glScalef(0.18, 0.18, 0.18);
     glPushMatrix();
         
-        glutSolidSphere(1, 30, 30);
+        glutSolidSphere(0.8, 30, 30);
 
-        glTranslatef(0.6, 0, 0);
-        glutSolidSphere(1, 30, 30);
+        glTranslatef(0.95, 0, 0);
+        glutSolidSphere(0.8, 30, 30);
 
         glScalef(1.4, 1.4, 0.2);
-        glTranslatef(-0.2, 0.35, 0);
+        glTranslatef(-0.3, 0.35, 0);
         glRotatef(50, 0, 0, 1);
         glRotatef(-5, 0, 0, 1);
         glutSolidCube(1.1);
 	glPopMatrix();
-    glDisable(GL_LIGHTING);
+    glDisable(GL_LIGHTING_BIT);
 }
 
 
@@ -178,7 +164,9 @@ void interfejsIgra() {
             glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,*it);
         }
     glDisable(GL_LIGHTING_BIT);
-    
+    crtajPecurku(-8.8,19,4);
+    crtajParadajz(-8.9,16,4);
+    crtajSargarepu(-8.8,12,4);
     for(int i=0;i<3-propusetno;i++) {
         glPushMatrix();
             glTranslatef(-8.7 + i*0.7, 8.8, 5);
@@ -188,34 +176,6 @@ void interfejsIgra() {
         glPopMatrix();
     }   
 }
-
-// void prozorIgra() {
-//     glEnable(GL_LIGHTING);
-
-//     /* Koeficijenti ambijentalne refleksije materijala. */
-//     GLfloat ambient_coeffs[] = { 0, 0.5, 0, 1 };
-
-//     /* Koeficijenti difuzne refleksije materijala. */
-//     GLfloat diffuse_coeffs[] = { 0, 1, 0, 1 };
-
-//     /* Koeficijenti spekularne refleksije materijala. */
-//     GLfloat specular_coeffs[] = { 0, 0, 0, 1 };
-
-//     /* Koeficijent glatkosti materijala. */
-//     GLfloat shininess = 10;
-
-//     glMaterialfv(GL_FRONT, GL_AMBIENT, ambient_coeffs);
-//     glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse_coeffs);
-//     glMaterialfv(GL_FRONT, GL_SPECULAR, specular_coeffs);
-//     glMaterialf(GL_FRONT, GL_SHININESS, shininess);
-//     glPushMatrix();
-//         glTranslatef(-9,23,4);
-//         glScalef(0.3,3,0.001);
-//         glutSolidCube(10);
-//     glPopMatrix();
-//     glutPostRedisplay();
-//     glDisable(GL_LIGHTING);
-// }
 
 void interfejsEnd() {
     glDisable(GL_LIGHTING_BIT);
@@ -242,13 +202,13 @@ void interfejsEnd() {
             glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,*it);
         }
         if(pogodjenBombom) {
-            glRasterPos3f(-2,15,3.4);
+            glRasterPos3f(-2,15.5,3.4);
             for(auto it=text3.begin();it!=text3.end();it++) {
                 glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,*it);
             }
         }
         else if(promasioPovrce) {
-            glRasterPos3f(-3,15,3.4);
+            glRasterPos3f(-3,15.5,3.4);
             for(auto it=text4.begin();it!=text4.end();it++) {
                 glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,*it);
             }

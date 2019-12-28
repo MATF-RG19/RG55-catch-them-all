@@ -117,7 +117,7 @@ void crtajLonac(float lonacTekuci) {
         GLfloat specular_coeffs[] = { 1, 1, 1, 1 };
 
         /* Koeficijent glatkosti materijala. */
-        GLfloat shininess = 100;
+        GLfloat shininess = 20;
 
         glMaterialfv(GL_FRONT, GL_AMBIENT, ambient_coeffs);
         glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse_coeffs);
@@ -362,7 +362,7 @@ void crtajSargarepu(float x,float y,float z) {
     glEnable(GL_LIGHTING);
 
     glPushMatrix();
-        glTranslatef(x+0.3,y,z);
+        glTranslatef(x+0.2,y,z);
         glRotatef(ugaoMain,0,1,1);
         crtajPeteljkaSargarepe();
         glEnable(GL_LIGHTING);
@@ -434,7 +434,7 @@ void crtajParadajz(float x, float y,float z) {
         glEnable(GL_LIGHTING);
 
         /* Koeficijenti ambijentalne refleksije materijala. */
-        GLfloat ambient_coeffs[] = { 1, 0, 0, 1 };
+        GLfloat ambient_coeffs[] = { 1, 0.3, 0, 1 };
 
         /* Koeficijenti difuzne refleksije materijala. */
         GLfloat diffuse_coeffs[] = { 1, 0.3, 0.3, 1 };
@@ -580,10 +580,10 @@ void crtajSto() {
     glEnable(GL_LIGHTING);
 
     /* Koeficijenti ambijentalne refleksije materijala. */
-    GLfloat ambient_coeffs[] = { 0.4, 0.2, 0.1, 1 };
+    GLfloat ambient_coeffs[] = { 0.5, 0.2, 0.1, 1 };
 
     /* Koeficijenti difuzne refleksije materijala. */
-    GLfloat diffuse_coeffs[] = { 0.2, 0.15, 0.1, 1 };
+    GLfloat diffuse_coeffs[] = { 0.5, 0.2, 0.1, 1 };
 
     /* Koeficijenti spekularne refleksije materijala. */
     GLfloat specular_coeffs[] = { 0, 0, 0, 1 };
@@ -607,32 +607,17 @@ void crtajSto() {
 }
 
 void crtajZid() {
-    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHTING_BIT);
 
-    /* Koeficijenti ambijentalne refleksije materijala. */
-    GLfloat ambient_coeffs[] = {0,0,0,1};
-
-    /* Koeficijenti difuzne refleksije materijala. */
-    GLfloat diffuse_coeffs[] = {0.1,1,0,1};
-
-    /* Koeficijenti spekularne refleksije materijala. */        
-    GLfloat specular_coeffs[] = { 0, 0, 0, 1 };
-
-    /* Koeficijent glatkosti materijala. */
-    GLfloat shininess = 0;
-
-    glMaterialfv(GL_FRONT, GL_AMBIENT, ambient_coeffs);
-    glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse_coeffs);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, specular_coeffs);
-    glMaterialf(GL_FRONT, GL_SHININESS, shininess);
+    glColor3f(0.8,0.6,0.2);
     glPushMatrix();
         glTranslatef(2.7,30,-40.2);
         glScalef(1,1,0.0001);
-        glutSolidCube(85);
+        glutSolidCube(85.4);
         glutPostRedisplay();
     glPopMatrix();
 
-    glDisable(GL_LIGHTING);    
+    glDisable(GL_LIGHTING_BIT);    
 }
 
 void crtaj(niz_element &ne, float dodatakTezini, bool restartBrisi){

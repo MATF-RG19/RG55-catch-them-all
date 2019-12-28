@@ -90,26 +90,9 @@ void vrata() {
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, index1);
 
-    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHTING_BIT);
 
-    /* Koeficijenti ambijentalne refleksije materijala. */
-    GLfloat ambient_coeffs[] = { 0.6, 0.5, 0.4, 1 };
-
-    /* Koeficijenti difuzne refleksije materijala. */
-    GLfloat diffuse_coeffs[] = { 0.6, 0.5, 0.4, 1 };
-
-    /* Koeficijenti spekularne refleksije materijala. */
-    GLfloat specular_coeffs[] = { 0, 0, 0, 1 };
-
-    /* Koeficijent glatkosti materijala. */
-    GLfloat shininess = 10;
-
-    glMaterialfv(GL_FRONT, GL_AMBIENT, ambient_coeffs);
-    glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse_coeffs);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, specular_coeffs);
-    glMaterialf(GL_FRONT, GL_SHININESS, shininess);
-
-
+    glColor3f(1,1,0.6);
     glBegin(GL_QUADS);
         glNormal3f(0, 0, 1);
 
@@ -134,7 +117,7 @@ void vrata() {
     
     
     // glutSwapBuffers();
-    glDisable(GL_LIGHTING);    
+    glDisable(GL_LIGHTING_BIT);    
     glEnable(GL_LIGHTING);
 }
 
@@ -143,24 +126,9 @@ void pod() {
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, index2);
 
-    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHTING_BIT);
 
-    /* Koeficijenti ambijentalne refleksije materijala. */
-    GLfloat ambient_coeffs[] = { 1, 0.4, 0.4, 1 };
-
-    /* Koeficijenti difuzne refleksije materijala. */
-    GLfloat diffuse_coeffs[] = { 1, 0.4, 0.4, 1 };
-
-    /* Koeficijenti spekularne refleksije materijala. */
-    GLfloat specular_coeffs[] = { 0.3, 0.1, 0.1, 1 };
-
-    /* Koeficijent glatkosti materijala. */
-    GLfloat shininess = 10;
-
-    glMaterialfv(GL_FRONT, GL_AMBIENT, ambient_coeffs);
-    glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse_coeffs);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, specular_coeffs);
-    glMaterialf(GL_FRONT, GL_SHININESS, shininess);
+    glColor3f(1,0.4,0.1);
 
     for(int i=0;i<16;i++) {
         for(int j=0;j<16;j++) {
@@ -190,7 +158,7 @@ void pod() {
     
     
     // glutSwapBuffers();
-    glDisable(GL_LIGHTING);    
+    glDisable(GL_LIGHTING_BIT);    
     glEnable(GL_LIGHTING);    
 }
 
@@ -199,24 +167,8 @@ void Remzi() {
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, index3);
     
-    glEnable(GL_LIGHTING);
-
-    /* Koeficijenti ambijentalne refleksije materijala. */
-    GLfloat ambient_coeffs[] = { 1, 1, 1, 1 };
-
-    /* Koeficijenti difuzne refleksije materijala. */
-    GLfloat diffuse_coeffs[] = { 1, 1, 1, 1 };
-
-    /* Koeficijenti spekularne refleksije materijala. */
-    GLfloat specular_coeffs[] = { 0.3, 0.1, 0.1, 1 };
-
-    /* Koeficijent glatkosti materijala. */
-    GLfloat shininess = 10;
-
-    glMaterialfv(GL_FRONT, GL_AMBIENT, ambient_coeffs);
-    glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse_coeffs);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, specular_coeffs);
-    glMaterialf(GL_FRONT, GL_SHININESS, shininess);
+    glEnable(GL_LIGHTING_BIT);
+    glColor3f(1,1,1);
     glBegin(GL_QUADS);
         glNormal3f(0, 0, 1);
 
@@ -253,7 +205,7 @@ void Remzi() {
     /* Nova slika se salje na ekran. */
     glDisable(GL_TEXTURE_2D);
     
-    glDisable(GL_LIGHTING);    
+    glDisable(GL_LIGHTING_BIT);    
     // glutSwapBuffers();   
     glEnable(GL_LIGHTING);
 }
@@ -263,25 +215,9 @@ void RemziSrecan() {
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, index4);
 
-    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHTING_BIT);
 
-    /* Koeficijenti ambijentalne refleksije materijala. */
-    GLfloat ambient_coeffs[] = { 0.4, 1, 0, 1 };
-
-    /* Koeficijenti difuzne refleksije materijala. */
-    GLfloat diffuse_coeffs[] = { 0.4, 1, 0, 1 };
-
-    /* Koeficijenti spekularne refleksije materijala. */
-    GLfloat specular_coeffs[] = { 0.3, 0.1, 0.1, 1 };
-
-    /* Koeficijent glatkosti materijala. */
-    GLfloat shininess = 10;
-
-    glMaterialfv(GL_FRONT, GL_AMBIENT, ambient_coeffs);
-    glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse_coeffs);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, specular_coeffs);
-    glMaterialf(GL_FRONT, GL_SHININESS, shininess);
-
+    glColor3f(1,1,1);
     glBegin(GL_QUADS);
         glNormal3f(0, 0, 1);
 
@@ -303,10 +239,9 @@ void RemziSrecan() {
     /* Nova slika se salje na ekran. */
     glDisable(GL_TEXTURE_2D);
     
-    glDisable(GL_LIGHTING);
+    glDisable(GL_LIGHTING_BIT);
     // glutSwapBuffers();   
     glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHTING_BIT);    
 }
 
 void RemziLjut1() {
@@ -314,25 +249,9 @@ void RemziLjut1() {
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, index5);
 
-    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHTING_BIT);
 
-    /* Koeficijenti ambijentalne refleksije materijala. */
-    GLfloat ambient_coeffs[] = { 1, 1, 1, 1 };
-
-    /* Koeficijenti difuzne refleksije materijala. */
-    GLfloat diffuse_coeffs[] = { 1, 1, 1, 1 };
-
-    /* Koeficijenti spekularne refleksije materijala. */
-    GLfloat specular_coeffs[] = { 0.3, 0.1, 0.1, 1 };
-
-    /* Koeficijent glatkosti materijala. */
-    GLfloat shininess = 10;
-
-    glMaterialfv(GL_FRONT, GL_AMBIENT, ambient_coeffs);
-    glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse_coeffs);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, specular_coeffs);
-    glMaterialf(GL_FRONT, GL_SHININESS, shininess);
-
+    glColor3f(1,1,1);
     glBegin(GL_QUADS);
         glNormal3f(0, 0, 1);
 
@@ -365,30 +284,14 @@ void RemziLjut2() {
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, index6);
 
-    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHTING_BIT);
 
-    /* Koeficijenti ambijentalne refleksije materijala. */
-    GLfloat ambient_coeffs[] = { 1, 1, 1, 1 };
-
-    /* Koeficijenti difuzne refleksije materijala. */
-    GLfloat diffuse_coeffs[] = { 0, 0, 0, 1 };
-
-    /* Koeficijenti spekularne refleksije materijala. */
-    GLfloat specular_coeffs[] = { 0.3, 0.1, 0.1, 1 };
-
-    /* Koeficijent glatkosti materijala. */
-    GLfloat shininess = 10;
-
-    glMaterialfv(GL_FRONT, GL_AMBIENT, ambient_coeffs);
-    glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse_coeffs);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, specular_coeffs);
-    glMaterialf(GL_FRONT, GL_SHININESS, shininess);
-
+    glColor3f(1,1,1);
     glBegin(GL_QUADS);
         glNormal3f(0, 0, 1);
 
         glTexCoord2f(0.1, 0);
-        glVertex3f(0, 8 , 3.1);
+        glVertex3f(-0, 8 , 3.1);
 
         glTexCoord2f(1, 0);
         glVertex3f(4.5, 8, 3.1);
@@ -397,7 +300,7 @@ void RemziLjut2() {
         glVertex3f(4.5, 15, 3.1);
 
         glTexCoord2f(0.1, 1);
-        glVertex3f(0, 15, 3.1);
+        glVertex3f(-0, 15, 3.1);
     glEnd();
     /* Iskljucujemo aktivnu teksturu */
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -405,7 +308,7 @@ void RemziLjut2() {
     /* Nova slika se salje na ekran. */
     glDisable(GL_TEXTURE_2D);
     
-    glDisable(GL_LIGHTING);
+    glDisable(GL_LIGHTING_BIT);
     // glutSwapBuffers();   
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHTING_BIT);   
