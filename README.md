@@ -14,5 +14,9 @@ NAPOMENA: Okretanje kamere bice izbaceno iz igre jer cemo da gledamo lonac sa fi
 
 POKRETANJE IGRE:
 1)Pozicionirati se u folder code
+
+
 2)Uci u terminal i pokrenuti naredbu : g++  CatchThemAll.cpp -o CatchThemAll -lglut -lGLU -lGL objekti.cpp interfejs.cpp teksture.cpp
+
+
 3)Nakon toga pokrenuti naredbu ./CatchThemAll
