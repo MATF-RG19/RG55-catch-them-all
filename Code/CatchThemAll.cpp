@@ -50,6 +50,7 @@ float vremeZaPadanje = 0;
 
 int brojZauzetihMesta = 0;
 
+// promenljive za logiku igre
 int propusetno = 0;
 int imamoParadajz = 0;
 int imamoPecurku = 0;
@@ -72,24 +73,23 @@ bool restartBrisi = false;
 // 0 - bomba, 1 - paradajz, 2 - sargarepa, 3 - pecurka
 bool koPada[BROJ_TELA];
 
+// niz od 5 elemenata koja drzi pozicije tela koja padaju na lokaciji na mapi
 vector<niz_element> niz;
 
 // funkcije akcije tastature
-// ovde prvo na klik 'j' i 'l' pomeramo kameru levo desno
-// na 'a' i 'd' pomeramo loncic levo i desno
-// na ESC dugme se prekida kod, a na 's' je start
+// na ESC dugme se prekida kod, a na 's' je start, 'r' je restart
 void keyboardFunction(unsigned char key, int x, int y) {
     if(key == 27) {
         cout << "Izasli ste iz igrice!" << endl;
         exit(0);
     }
-    if(key == 's') {
+    if(key == 's') { // za startovanje igre
         if(flagStart != true) {
             flagStart = true;
             glutTimerFunc(MOTION_INTERVAL,onTimerMain,1);
         }
     }
-    if(key == 'r' && flagStart && !eksplozijaSkuplja && !eksplozijaSiri) {
+    if(key == 'r' && flagStart && !eksplozijaSkuplja && !eksplozijaSiri) { // za resetovanje igre
         imamoParadajz = 0;
         imamoPecurku = 0;
         imamoSargarepu = 0;
@@ -117,7 +117,7 @@ void keyboardFunction(unsigned char key, int x, int y) {
 }
 
 void SpecialInput(int key, int x, int y) {
-    switch(key) {
+    switch(key) { // komande na strelicama
         case GLUT_KEY_LEFT:
             if(lonacTekuci > -8.0 and flagStart and !izgubioIgru) {
                 if(!flagAkcija) {
@@ -138,6 +138,93 @@ void SpecialInput(int key, int x, int y) {
         break;
     }
     glutPostRedisplay();
+}
+
+// glavna logika igrice je ovo!!!
+void logikaIgre() {
+    if(!flagStart) {
+        prozorStart();
+        interfejsStart();
+    }
+    else {
+        if((izgubioIgru && !eksplozijaSiri && !eksplozijaSkuplja) || pobedioIgru) {
+            interfejsEnd();
+            prozorEnd();
+        }
+        if(!izgubioIgru) {
+            crtajPecurku(-8.8,19,4);
+            crtajParadajz(-8.9,16,4);
+            crtajSargarepu(-8.8,12,4);
+            interfejsIgra();
+        }
+        crtajTanjire();
+        if(!promasioPovrce) {
+            crtajLonac(lonacTekuci);
+        }
+        
+        if(restartBrisi == true) {
+            if(timerBrisi == 1) {
+                restartBrisi = false;
+                timerBrisi = 0;
+            }
+            else {
+                timerBrisi += 1;
+            }
+        }
+        if(flagStart == true && !izgubioIgru && !restartBrisi) {
+            timerInterval++;
+        }
+        if(timerInterval%ispustanjeInterval == 0 && flagStart == true && !izgubioIgru && !restartBrisi && !pobedioIgru) {
+            srand(time(NULL));
+            int biramoMesto = rand()%5;
+            bool petlja;
+            int biramoTip;
+            do { // kada smo sakupili 20 pecuraka vise ih nece izbacivati!
+                biramoTip = rand()%4;
+                petlja = false;
+                if(biramoTip == 1 && imamoParadajz == 20) {
+                    petlja = true;
+                }
+                if(biramoTip == 2 && imamoSargarepu == 20) {
+                    petlja = true;
+                }
+                if(biramoTip == 3 && imamoPecurku == 20) {
+                    petlja = true;
+                }
+            } while(petlja);
+
+            if(niz[biramoMesto].zauzet == false && brojZauzetihMesta < 6){
+                niz[biramoMesto].tip = biramoTip;
+                niz[biramoMesto].x_pos = -8 + biramoMesto*4 ;
+                niz[biramoMesto].zauzet = true;
+                niz[biramoMesto].y_pos = 28;
+                ispaljenObjekat += 1;
+                brojZauzetihMesta += 1;
+                if(ispaljenObjekat % 10 == 0)  {
+                    // na svakih ispaljenih 10 objekata, tezina se uvecava
+                    // i povecava se frekvencija izbacivanja!!
+                    ispaljenObjekat += 1;
+                    ispustanjeInterval -= 20;
+                    if(ispustanjeInterval == 0) {
+                        ispustanjeInterval = 5;
+                    }
+                    dodatakTezini += 0.05;
+                }
+            }
+        }
+        for(int i=0;i<niz.size();i++) {
+            if(niz[i].tip!=-1 && flagStart == true && !izgubioIgru && !pobedioIgru) {
+                crtaj(niz[i],dodatakTezini,restartBrisi);
+            }
+        }
+        if(eksplozijaSiri == true || eksplozijaSkuplja == true) {
+            crtajEksploziju();
+        }
+        crtajZid();
+        pod();
+        vrata();
+        crtajSto();
+    }
 }
 
 // funkcija koja renderuje nasu sliku
@@ -172,91 +259,13 @@ void renderFunction() {
         glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
         glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
 
-        
-        if(!flagStart) {
-            prozorStart();
-            interfejsStart();
-        }
-        else {
-            if((izgubioIgru && !eksplozijaSiri && !eksplozijaSkuplja) || pobedioIgru) {
-                interfejsEnd();
-                prozorEnd();
-            }
-            if(!izgubioIgru) {
-                interfejsIgra();
-            }
-            crtajTanjire();
-            if(!promasioPovrce) {
-                crtajLonac(lonacTekuci);
-            }
-            
-            if(restartBrisi == true) {
-                if(timerBrisi == 1) {
-                    restartBrisi = false;
-                    timerBrisi = 0;
-                }
-                else {
-                    timerBrisi += 1;
-                }
-            }
-            if(flagStart == true && !izgubioIgru && !restartBrisi) {
-                timerInterval++;
-            }
-            if(timerInterval%ispustanjeInterval == 0 && flagStart == true && !izgubioIgru && !restartBrisi && !pobedioIgru) {
-                srand(time(NULL));
-                int biramoMesto = rand()%5;
-                bool petlja;
-                int biramoTip;
-                do { // kada smo sakupili 20 pecuraka vise ih nece izbacivati!
-                    biramoTip = rand()%4;
-                    petlja = false;
-                    if(biramoTip == 1 && imamoParadajz == 20) {
-                        petlja = true;
-                    }
-                    if(biramoTip == 2 && imamoSargarepu == 20) {
-                        petlja = true;
-                    }
-                    if(biramoTip == 3 && imamoSargarepu == 20) {
-                        petlja = true;
-                    }
-                } while(petlja);
+        logikaIgre();        
 
-                if(niz[biramoMesto].zauzet == false && brojZauzetihMesta < 5){
-                    niz[biramoMesto].tip = biramoTip;
-                    niz[biramoMesto].x_pos = -8 + biramoMesto*4 ;
-                    niz[biramoMesto].zauzet = true;
-                    niz[biramoMesto].y_pos = 30;
-                    if(biramoTip == 0) {
-                        brojZauzetihMesta += 1;
-                    } 
-                    ispaljenObjekat += 1;
-                    if(ispaljenObjekat % 10 == 0)  {
-                        ispaljenObjekat += 1;
-                        ispustanjeInterval -= 10;
-                        if(ispustanjeInterval == 0) {
-                            ispustanjeInterval = 10;
-                        }
-                        dodatakTezini += 0.05;
-                    }
-                }
-            }
-            for(int i=0;i<niz.size();i++) {
-                if(niz[i].tip!=-1 && flagStart == true && !izgubioIgru && !pobedioIgru) {
-                    crtaj(niz[i],dodatakTezini,restartBrisi);
-                }
-            }
-            if(eksplozijaSiri == true || eksplozijaSkuplja == true) {
-                crtajEksploziju();
-            }
-            crtajZid();
-            pod();
-            vrata();
-            crtajSto();
-        }
     glPopMatrix();
     glutSwapBuffers();
 }
 
+// inicijalizacija gluta
 void inicijalizujGlut() {
     glClearColor(0.9,0.6,0.2,0);
     glEnable(GL_DEPTH_TEST);
@@ -272,11 +281,13 @@ int main(int argc, char **argv) {
     glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
     glutCreateWindow("CATCH THEM ALL!!!");
     
+    // generisanje niza za pozicije u mapi
     brojZauzetihMesta = 0;
     for(int i=-8;i<=8;i=i+4) {
         niz.push_back({(float)i,30,-1,false});
     }
 
+    // ukljucivanje teksure i preuzimanje slika
     glEnable(GL_TEXTURE_2D);
     string putanja1 = "../Slike/1.bmp";
     index1 = ucitaj_sliku(putanja1.c_str()); // vrata

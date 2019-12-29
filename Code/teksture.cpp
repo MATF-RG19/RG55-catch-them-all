@@ -6,7 +6,6 @@
 
 using namespace std;
 
-// ova funkcija je preuzeta od kolege Mihajla Ilica
 unsigned int ucitaj_sliku(const char* path) {
     FILE *file=fopen(path,"rb");
     if(file==NULL){
@@ -129,7 +128,7 @@ void pod() {
 
     glEnable(GL_LIGHTING_BIT);
 
-    glColor3f(1,0.4,0.1);
+    glColor3f(1,0.35,0.05);
 
     for(int i=0;i<16;i++) {
         for(int j=0;j<16;j++) {

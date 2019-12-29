@@ -48,7 +48,7 @@ struct niz_element{
 // onTimer funkcija za transliranje lonca
 void onTimer(int val);
 
-// onTimerMain funkcija za stalno rotiranje lonca
+// onTimerMain funkcija za stalno rotiranje lonca i ob
 void onTimerMain(int val);
 
 // funkcija za crtanje tela lonca
@@ -96,9 +96,13 @@ void crtajSupu();
 // crtamo sto(platforma igre)
 void crtajSto();
 
+// crtamo eksploziju lonca
 void crtajEksploziju();
 
+// crtamo pozadinski zid
 void crtajZid();
 
+// zrtamo objekte na pozicije u nizu, ovo je najvaznija funkcija vezano
+// za logiku igre!
 void crtaj(niz_element &ne, float dodatakTezini,bool restartBrisi);
 #endif

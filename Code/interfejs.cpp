@@ -10,6 +10,7 @@
 
 using namespace std;
 
+// funkcija koja nam srca srca koliko nam je zivota ostalo
 static void crtajSrce(){
     glEnable(GL_LIGHTING_BIT);
     glColor3f(0.8,0,0);
@@ -134,7 +135,7 @@ void interfejsIgra() {
     string txt2 = to_string(20 - imamoParadajz);
     string txt3 = "zivoti";
     
-    glColor3f(0.2,0.1,0.5);
+    glColor3f(0.5,0.2,0);
     glRasterPos3f(-9,17.6,4.1);
         for(auto it=txt.begin();it!=txt.end();it++) {
             glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,*it);
@@ -142,7 +143,7 @@ void interfejsIgra() {
     glDisable(GL_LIGHTING_BIT);
 
     glEnable(GL_LIGHTING_BIT);
-    glColor3f(0.3,0.3,0);
+    glColor3f(0.3,0.1,0);
     glRasterPos3f(-9,10.7,4.1);
         for(auto it=txt1.begin();it!=txt1.end();it++) {
             glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,*it);
@@ -150,7 +151,7 @@ void interfejsIgra() {
     glDisable(GL_LIGHTING_BIT);
 
     glEnable(GL_LIGHTING_BIT);
-    glColor3f(0.3,0,0.1);
+    glColor3f(0.5,0.1,0.1);
     glRasterPos3f(-9,14,4.1);
         for(auto it=txt2.begin();it!=txt2.end();it++) {
             glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,*it);
@@ -158,15 +159,13 @@ void interfejsIgra() {
     glDisable(GL_LIGHTING_BIT);
     
     glEnable(GL_LIGHTING_BIT);
-    glColor3f(0.5,0.2,0.1);
+    glColor3f(0.6,0.1,0.1);
     glRasterPos3f(-9,9.2,4.1);
         for(auto it=txt3.begin();it!=txt3.end();it++) {
             glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,*it);
         }
     glDisable(GL_LIGHTING_BIT);
-    crtajPecurku(-8.8,19,4);
-    crtajParadajz(-8.9,16,4);
-    crtajSargarepu(-8.8,12,4);
+
     for(int i=0;i<3-propusetno;i++) {
         glPushMatrix();
             glTranslatef(-8.7 + i*0.7, 8.8, 5);
@@ -242,10 +241,10 @@ void prozorEnd() {
     glEnable(GL_LIGHTING);
 
     /* Koeficijenti ambijentalne refleksije materijala. */
-    GLfloat ambient_coeffs[] = { 0, 1, 0 , 1 };
+    GLfloat ambient_coeffs[] = { 0.2, 1, 0 , 1 };
 
     /* Koeficijenti difuzne refleksije materijala. */
-    GLfloat diffuse_coeffs[] = { 0, 1, 0, 1 };
+    GLfloat diffuse_coeffs[] = { 0.2, 1, 0, 1 };
 
     /* Koeficijenti spekularne refleksije materijala. */
     GLfloat specular_coeffs[] = { 0, 0, 0, 1 };

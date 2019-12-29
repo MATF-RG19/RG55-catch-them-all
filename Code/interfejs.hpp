@@ -27,19 +27,19 @@ extern bool eksplozijaSkuplja;
 extern bool promasioPovrce;
 extern int izvrniLonac;
 
-
+// funkcija za iscrtavanje slova na start meniju
 void interfejsStart();
 
+// funkcija koja nam iscrtava pozadinu start menija
 void prozorStart();
 
+// funkcija koja iscrtava nas skor i ostatak zivota
 void interfejsIgra();
 
-void prozorIgra();
-
+// funkcija koja iscrtava nas end meni
 void interfejsEnd();
 
+// dunkcija koja iscrtaca nas end meni pozdinu
 void prozorEnd();
-
-void initTextures();
 
 #endif

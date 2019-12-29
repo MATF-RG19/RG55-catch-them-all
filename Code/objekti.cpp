@@ -19,6 +19,7 @@ int eksplozijaTimer = 0;
 
 using namespace std;
 
+// timer za pokretanje lonca
 void onTimer(int val) {
     if(val != TIMER_TRANSLIRANJA_LONCA) {
         return;
@@ -31,7 +32,7 @@ void onTimer(int val) {
             return;
         }
         else {
-            lonacTekuci -= 1;
+            lonacTekuci -= 4.0/3.0;
             glutPostRedisplay();
             if(flagAkcija) {
                 glutTimerFunc(MOTION_INTERVAL,onTimer,TIMER_TRANSLIRANJA_LONCA);
@@ -46,7 +47,7 @@ void onTimer(int val) {
             return;
         }
         else {
-            lonacTekuci += 1;
+            lonacTekuci += 4.0/3.0;
             glutPostRedisplay();
             if(flagAkcija) {
                 glutTimerFunc(MOTION_INTERVAL,onTimer,TIMER_TRANSLIRANJA_LONCA);
@@ -55,6 +56,7 @@ void onTimer(int val) {
     }
 }
 
+// timer generalan
 void onTimerMain(int val) {
     if(val != TIMER_START_PROGRAM) {
         return;
@@ -62,10 +64,9 @@ void onTimerMain(int val) {
     if(ugaoMain > 360.0) {
         ugaoMain = 0;
     }
-    // sada krecemo da bacamo nase telo
     if(vremeZaPadanje == 100 + 0.1) {
-        koPada[0] = true;
-        vremeZaPadanje = 0;
+         koPada[0] = true;
+         vremeZaPadanje = 0;
     }
     ugaoMain += 1.0;
     
@@ -413,8 +414,8 @@ void crtajPeteljkaSargarepe() {
     glMaterialfv(GL_FRONT, GL_SPECULAR, specular_coeffs);
     glMaterialf(GL_FRONT, GL_SHININESS, shininess);
     glPushMatrix();
-        glTranslatef(0,0,-0.5);
-        glutSolidCylinder(0.1,1,40,40);
+        glTranslatef(0,0,-0.3);
+        glutSolidCylinder(0.05,0.6,40,40);
         glutPostRedisplay();
     glPopMatrix();
 
@@ -621,21 +622,49 @@ void crtajZid() {
 }
 
 void crtaj(niz_element &ne, float dodatakTezini, bool restartBrisi){
-    ne.y_pos -= 0.05 + dodatakTezini;
-    // promena iscrtavamo paradajz ceo
+    ne.y_pos -= 0.075 + dodatakTezini;
+    // za crtanje Bombe
     if(ne.tip == 0 && !restartBrisi) {
         crtajBombu(ne.x_pos,ne.y_pos);
     }
+    // za crtanje Paradajza
     if(ne.tip==1 && !restartBrisi){
-		crtajParadajz(ne.x_pos,ne.y_pos,0);        
+        if(imamoParadajz == 20) {
+            ne.y_pos=28;
+            ne.tip=-1;
+            ne.zauzet = false;
+            brojZauzetihMesta -= 1;
+        }
+        else {
+		    crtajParadajz(ne.x_pos,ne.y_pos,0);
+        }        
     }
+    // za crtanje Sargarepe
     if(ne.tip==2 && !restartBrisi){
-        crtajSargarepu(ne.x_pos,ne.y_pos,0);
+        if(imamoSargarepu == 20) {
+            ne.y_pos=28;
+            ne.tip=-1;
+            ne.zauzet = false;
+            brojZauzetihMesta -= 1;
+        }
+        else {
+		    crtajSargarepu(ne.x_pos,ne.y_pos,0);
+        }    
     }
+    // za crtanje Pecurke
     if(ne.tip==3 && !restartBrisi){
-        crtajPecurku(ne.x_pos,ne.y_pos,0);
+        if(imamoPecurku == 20) {
+            ne.y_pos=28;
+            ne.tip=-1;
+            ne.zauzet = false;
+            brojZauzetihMesta -= 1;
+        }
+        else {
+		    crtajPecurku(ne.x_pos,ne.y_pos,0);
+        }    
     }
-    if(ne.y_pos<=1.0){
+    // ako nam je ispao materijal na pod
+    if(ne.y_pos<=0.8){
         if(ne.tip != 0) {
             propusetno += 1;
             if(propusetno == 3) {
@@ -643,12 +672,13 @@ void crtaj(niz_element &ne, float dodatakTezini, bool restartBrisi){
                 promasioPovrce = true;
             }
         }
-        ne.y_pos=30;
+        ne.y_pos=28;
         ne.tip=-1;
         ne.zauzet = false;
         brojZauzetihMesta -= 1;
     }
-    if((ne.x_pos < lonacTekuci + 1 && ne.x_pos > lonacTekuci - 1 ) && (ne.y_pos > 0  && ne.y_pos < 2.3)) {
+    // ako smo uhvatili materijal
+    if((ne.x_pos < lonacTekuci + 1 && ne.x_pos > lonacTekuci - 1 ) && (ne.y_pos > 0.8  && ne.y_pos < 2.3)) {
         if(ne.tip == 0) {
             izgubioIgru = true;
             pogodjenBombom = true;
@@ -671,13 +701,14 @@ void crtaj(niz_element &ne, float dodatakTezini, bool restartBrisi){
         if(imamoParadajz == 20 && imamoPecurku == 20 && imamoSargarepu == 20) {
             pobedioIgru = true;
         }
-        ne.y_pos=30;
+        ne.y_pos=28;
         ne.tip=-1;
         ne.zauzet = false;
         brojZauzetihMesta -= 1;
     }
+    // ako smo kliknuli na restart dugme
     if(restartBrisi == true) {
-		ne.y_pos=30;
+		ne.y_pos=28;
         ne.tip=-1;
         ne.zauzet = false;
         brojZauzetihMesta -= 1;
