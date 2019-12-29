@@ -1,7 +1,7 @@
 # RG55-catch-them-all
 Catch Them All 
 
-Catch Them All(the soup game) je igra u kome mi igramo kao lonac koji hvata sargarepu, paradajz i pecurku i moramo od svake vrste da uhvatimo neki odredjen broj. Ako sakupimo odredjeni broj svakog povrca, mi smo pobedili u igrici. Ako nam 3 puta padne neko od povrca  na pod ili nas pogodi bomba, mi smo izgubili.
+Catch Them All(the soup game) je igra u kojoj igramo kao lonac koji hvata sargarepe, paradajz ili pecurke. Moramo od svake vrste da uhvatimo neki odredjen broj. Ako sakupimo odredjeni broj svakog povrca, pobedili smo. Ako nam 3 puta padne neko povrce  na pod ili nas pogodi bomba, izgubili smo.
 
 Kontrole:
 * <- - krecemo se levo
@@ -10,9 +10,10 @@ Kontrole:
 * R - restartujemo igru
 * ESC - izlazimo iz igre
 
-NAPOMENA: Okretanje kamere bice izbaceno iz igre jer cemo da gledamo lonac sa fiksiranog polozaja
+SKIDANJE IGRICE: skinuti direktno sa githuba na linku: https://github.com/MATF-RG19/RG55-catch-them-all/edit/master/README.md
 
 POKRETANJE IGRE:
+
 1)Pozicionirati se u folder code
 
 
